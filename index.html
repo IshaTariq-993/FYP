@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroAI MRI Analyzer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-family: 'Arial', sans-serif;
+        }
+        .upload-container {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+        .drag-drop-box {
+            border: 2px dashed #0d6efd;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            padding: 40px;
+            cursor: pointer;
+        }
+        .drag-drop-box:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+            border-color: #0b5ed7;
+        }
+        .file-info {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .file-preview {
+            margin-top: 20px;
+            max-height: 300px;
+            max-width: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <h1 class="text-primary mb-2">
+                <i class="bi bi-brain"></i>  NeuroAI Alzheimer’s Dementia Staging Diagnostic System 
+            </h1>
+            <p class="lead text-muted">AI-powered Dementia Detection from MRI Scans</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="upload-container">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="alert alert-warning alert-dismissible fade show">
+                                {{ messages[0] }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="drag-drop-box">
+                        <form method="POST" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <i class="bi bi-file-earmark-image text-primary display-6"></i>
+                                <input type="file" class="form-control mt-3" name="file" accept=".png,.jpg,.jpeg,.tiff" required onchange="previewImage(event)">
+                                <div class="file-info mt-2">Supported formats: PNG, JPEG, TIFF (max 5MB)</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-search-heart me-2"></i> Analyze MRI Scan
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="imagePreviewContainer" style="display:none;">
+                        <h5 class="mt-3">Image Preview</h5>
+                        <img id="imagePreview" class="file-preview" alt="Image Preview">
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center text-muted small">
+                    <p class="mb-0">
+                        <i class="bi bi-shield-lock"></i> HIPAA-compliant secure processing<br>
+                        <i class="bi bi-clock-history"></i> Results available in 1-3 minutes
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Preview the uploaded image
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                document.getElementById('imagePreviewContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</body>
+</html>
